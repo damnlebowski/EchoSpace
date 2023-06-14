@@ -1,0 +1,67 @@
+
+// import 'dart:async';
+// import 'package:flutter/material.dart';
+
+// class MyForm extends StatelessWidget {
+//   final TextEditingController emailController = TextEditingController();
+//   final TextEditingController passwordController = TextEditingController();
+
+//   Stream<bool> get buttonColorStream {
+//     final StreamController<bool> controller = StreamController<bool>();
+
+//     void updateButtonColor() {
+//       final bool isBothFieldsFilled =
+//           emailController.text.isNotEmpty && passwordController.text.isNotEmpty;
+//       controller.add(isBothFieldsFilled);
+//     }
+
+//     void dispose() {
+//       controller.close();
+//     }
+
+//     emailController.addListener(updateButtonColor);
+//     passwordController.addListener(updateButtonColor);
+
+//     return controller.stream;
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Column(
+//         mainAxisAlignment: MainAxisAlignment.center,
+//         children: [
+//           TextField(
+//             controller: emailController,
+//             decoration: InputDecoration(
+//               labelText: 'Email',
+//             ),
+//           ),
+//           TextField(
+//             controller: passwordController,
+//             decoration: InputDecoration(
+//               labelText: 'Password',
+//             ),
+//           ),
+//           StreamBuilder<bool>(
+//             stream: buttonColorStream,
+//             initialData: false,
+//             builder: (context, snapshot) {
+//               final bool isBothFieldsFilled = snapshot.data!;
+//               final buttonColor = isBothFieldsFilled ? Colors.red : Colors.grey;
+//               return ElevatedButton(
+//                 onPressed: () {
+//                   // Button action
+//                 },
+//                 style: ElevatedButton.styleFrom(
+//                   primary: buttonColor,
+//                 ),
+//                 child: Text('Submit'),
+//               );
+//             },
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
