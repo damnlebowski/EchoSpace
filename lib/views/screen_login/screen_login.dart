@@ -1,127 +1,126 @@
+import 'dart:developer';
 import 'package:echospace/core/constants/colors.dart';
-import 'package:echospace/views/screen_otp/screen_otp.dart';
+import 'package:echospace/core/constants/widgets.dart';
+import 'package:echospace/services/otp_auth_services.dart';
+import 'package:echospace/views/screen_login_otp/screen_login_otp.dart';
 import 'package:echospace/views/widgets/button_widget.dart';
+import 'package:echospace/views/widgets/textform_widget.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class EmailLoginPage extends StatelessWidget {
-  EmailLoginPage({super.key});
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+OtpAuth authObj = OtpAuth();
+
+class MobileLoginPage extends StatelessWidget {
+  MobileLoginPage({super.key});
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController mobileController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBgBlack,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              color: kWhite,
-            )),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: kBgBlack,
-        title: Image.asset(
-          'assests/EchoSpace.png',
-          width: 200,
-        ),
-        actions: [
-          TextButton(
-              onPressed: () {},
-              child: const Text(
-                'Sign Up',
-                style: TextStyle(color: kWhite),
-              ))
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextFormFieldWidget(
-              lableText: 'Email',
-              controller: emailController,
-              keyboardType: TextInputType.emailAddress,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'please enter your email';
-                } else if (!value.endsWith('.com')) {
-                  return 'Enter a valid email.';
-                }
-                return null;
-              },
-            ),
-            TextFormFieldWidget(
-              lableText: 'Password',
-              controller: passwordController,
-              isobscure: true,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'pls enter password';
-                }
-                return null;
-              },
-            ),
-            const Expanded(child: SizedBox()),
-            ButtonWidget(
-                label: 'Continue',
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const CheckOtp(),
-                  ));
-                },
-                buttonColor: kInactiveColor)
-          ],
-        ),
-      ),
-    );
-  }
-}
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  Image.asset(height: 160, 'assests/EchoSpace.png'),
+                  const Positioned(
+                    left: 70,
+                    top: 40,
+                    child: CustomText(
+                      label: 'Sign In to',
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+              Image.asset('assests/bg_tree.png'),
+              Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: TextFormFieldWidget(
+                    lableText: 'Mobile',
+                    controller: mobileController,
+                    keyboardType: TextInputType.phone,
+                    maxLength: 10,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'please enter your mobile';
+                      } else if (value.length != 10) {
+                        return 'Enter a valid mobile.';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ),
+              ButtonWidget(
+                  label: 'Send OTP',
+                  onTap: () async {
+                    //check validate
+                    if (!_formKey.currentState!.validate()) return;
 
-class TextFormFieldWidget extends StatelessWidget {
-  const TextFormFieldWidget({
-    super.key,
-    required this.lableText,
-    required this.controller,
-    this.isobscure = false,
-    this.keyboardType,
-    this.maxLength,
-    this.validator,
-  });
-  final String lableText;
-  final TextEditingController controller;
-  final bool isobscure;
-  final TextInputType? keyboardType;
-  final int? maxLength;
-  final String? Function(String?)? validator;
+                    //send otp
+                    authObj.sendOtp('+91${mobileController.text.trim()}');
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, bottom: 10),
-      child: TextFormField(
-        obscureText: isobscure,
-        controller: controller,
-        style: const TextStyle(color: kWhite),
-        keyboardType: keyboardType,
-        maxLength: maxLength,
-        decoration: InputDecoration(
-          counterStyle: const TextStyle(
-            color: kWhite,
-          ),
-          labelText: lableText,
-          labelStyle: const TextStyle(color: kWhite),
-          filled: true,
-          fillColor: kInactiveColor,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+                    //navigate to otp section
+                    Get.to(() => CheckLoginOtp(
+                        mobile: '+91${mobileController.text.trim()}'));
+                  },
+                  buttonColor: kRed),
+              kHeight25,
+              Padding(
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                child: RichText(
+                  text: TextSpan(
+                    style: DefaultTextStyle.of(context).style.copyWith(
+                        fontSize: 12,
+                        color: kWhite,
+                        decoration: TextDecoration.none),
+                    children: [
+                      const TextSpan(
+                        text: "By continuing, you agree to our ",
+                        style: TextStyle(),
+                      ),
+                      TextSpan(
+                        text: "User Agreement",
+                        style: const TextStyle(
+                          color: kRed,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            log('User Agreement');
+                          },
+                      ),
+                      const TextSpan(
+                        text: " and ",
+                        style: TextStyle(),
+                      ),
+                      TextSpan(
+                        text: "Privacy Policy",
+                        style: const TextStyle(
+                          color: kRed,
+                        ),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            log('Privacy Policy');
+                          },
+                      ),
+                      const TextSpan(
+                        text: ".",
+                        style: TextStyle(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        validator: validator,
       ),
     );
   }

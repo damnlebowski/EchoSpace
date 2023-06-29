@@ -1,18 +1,17 @@
 import 'package:echospace/core/constants/colors.dart';
+import 'package:echospace/services/username_availablity.dart';
 import 'package:echospace/views/add_avatar_screen/add_avatar_screen.dart';
 import 'package:echospace/views/screen_login/screen_login.dart';
 import 'package:echospace/views/widgets/button_widget.dart';
+import 'package:echospace/views/widgets/textform_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
   final _formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  // TextEditingController mobileController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +35,9 @@ class RegisterPage extends StatelessWidget {
         ),
         actions: [
           TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.off(MobileLoginPage());
+              },
               child: const Text(
                 'Log In',
                 style: TextStyle(color: kWhite),
@@ -74,44 +75,6 @@ class RegisterPage extends StatelessWidget {
                     return null;
                   },
                 ),
-                TextFormFieldWidget(
-                  lableText: 'Email',
-                  controller: emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'please enter your email';
-                    } else if (!value.endsWith('.com')) {
-                      return 'Enter a valid email.';
-                    }
-                    return null;
-                  },
-                ),
-                // TextFormFieldWidget(
-                //   lableText: 'Mobile',
-                //   controller: mobileController,
-                //   keyboardType: TextInputType.phone,
-                //   maxLength: 10,
-                //   validator: (value) {
-                //     if (value == null || value.isEmpty) {
-                //       return 'please enter your mobile';
-                //     } else if (value.length != 10) {
-                //       return 'Enter a valid mobile.';
-                //     }
-                //     return null;
-                //   },
-                // ),
-                TextFormFieldWidget(
-                  lableText: 'Password',
-                  controller: passwordController,
-                  isobscure: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'pls enter password';
-                    }
-                    return null;
-                  },
-                ),
                 const CustomText(
                   label:
                       "* User Name Should be unique and doesn't contain whitespace or special characters.",
@@ -123,11 +86,28 @@ class RegisterPage extends StatelessWidget {
                 ),
                 ButtonWidget(
                     label: 'Continue',
-                    onTap: () {
+                    onTap: () async {
+                      //checking username availablity
+                      bool userNameAvailable = await UserNameList()
+                          .checkForUsernameAvailablity(
+                              usernameController.text.trim());
                       if (!_formKey.currentState!.validate()) return;
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => AddAvatarPage(),
-                      ));
+                      if (!userNameAvailable) {
+                        Get.snackbar(
+                          'Error',
+                          'Username already taken.',
+                          snackPosition: SnackPosition.BOTTOM,
+                          backgroundColor: Colors.grey[800],
+                          colorText: Colors.red,
+                          duration: const Duration(seconds: 2),
+                        );
+                        return;
+                      }
+
+                      Get.to(() => AddAvatarPage(profileDetails: {
+                            'name': nameController.text.trim(),
+                            'userName': usernameController.text.trim(),
+                          }));
                     },
                     buttonColor: kInactiveColor)
               ],

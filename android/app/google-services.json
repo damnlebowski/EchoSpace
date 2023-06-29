@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "710633229004",
+    "project_id": "echospace-7dbf6",
+    "storage_bucket": "echospace-7dbf6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:710633229004:android:cb96dbe4750ca4519b1069",
+        "android_client_info": {
+          "package_name": "com.lebowski.echospace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "710633229004-b65cs0qmr96i2fljce7lpo79st6da09o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lebowski.echospace",
+            "certificate_hash": "38f001578f3289b3851ab6de59cb7312607426ad"
+          }
+        },
+        {
+          "client_id": "710633229004-bvpaobjn0g79vj8stv17kpqge7tg1hfu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbgp5EqW4zsXMIlwG4krCkGaOb9iQw5lQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "710633229004-bvpaobjn0g79vj8stv17kpqge7tg1hfu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

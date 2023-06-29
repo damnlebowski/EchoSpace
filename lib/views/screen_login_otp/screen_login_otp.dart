@@ -1,11 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echospace/core/constants/colors.dart';
 import 'package:echospace/core/constants/widgets.dart';
+import 'package:echospace/services/user_connections.dart';
+import 'package:echospace/services/user_details.dart';
+import 'package:echospace/views/screen_home/screen_home.dart';
 import 'package:echospace/views/screen_login/screen_login.dart';
+import 'package:echospace/views/screen_main/screen_main.dart';
+import 'package:echospace/views/user_register_screen/user_register_screen.dart';
 import 'package:echospace/views/widgets/button_widget.dart';
+import 'package:echospace/views/widgets/textform_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class CheckOtp extends StatelessWidget {
-  const CheckOtp({super.key});
+class CheckLoginOtp extends StatelessWidget {
+  const CheckLoginOtp({super.key, required this.mobile});
+
+  final String mobile;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +27,7 @@ class CheckOtp extends StatelessWidget {
         automaticallyImplyLeading: false,
         leading: IconButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              Get.back();
             },
             icon: const Icon(
               Icons.arrow_back,
@@ -45,8 +55,8 @@ class CheckOtp extends StatelessWidget {
               fontSize: 15,
               fontWeight: FontWeight.w400,
             ),
-            const CustomText(
-              label: 'email',
+            CustomText(
+              label: mobile,
               fontSize: 15,
               fontWeight: FontWeight.w400,
             ),
@@ -56,16 +66,34 @@ class CheckOtp extends StatelessWidget {
               child: TextFormFieldWidget(
                   lableText: 'Verification Code',
                   controller: otpController,
-                  // keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.number,
                   maxLength: 6),
             ),
-            const CustomText(label: 'Resend in 0:59', fontSize: 16),
             const Expanded(child: SizedBox()),
             ButtonWidget(
-                label: 'Continue', onTap: () {}, buttonColor: kInactiveColor)
+                label: 'Continue',
+                onTap: () async {
+                  verifyOtp(otpController.text.trim());
+                },
+                buttonColor: kRed)
           ],
         ),
       ),
     );
+  }
+
+  verifyOtp(String otp) async {
+    bool verified = await authObj.verifyOtp(otp);
+    if (verified) {
+      bool isExisist = await UserDetails().isUserIdExists(mobile);
+      if (isExisist) {
+        Get.offAll(MainScreen());
+        // await UserConnections().getAllConnectionPost();
+      } else {
+        Get.offAll(RegisterPage());
+      }
+    } else {
+      return;
+    }
   }
 }
