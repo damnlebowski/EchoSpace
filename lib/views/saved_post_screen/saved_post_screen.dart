@@ -1,9 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:echospace/core/constants/colors.dart';
+import 'package:echospace/utils/constants/colors.dart';
+import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/widgets/post_card_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -57,11 +57,11 @@ class SavedPage extends StatelessWidget {
                       bool isLiked = (snapshot.data!.docs[index].data()['likes']
                               as List<dynamic>)
                           .contains(
-                              FirebaseAuth.instance.currentUser!.phoneNumber!);
+                             getUser()!.phoneNumber!);
                       bool isSaved = (snapshot.data!.docs[index].data()['saved']
                               as List<dynamic>)
                           .contains(
-                              FirebaseAuth.instance.currentUser!.phoneNumber!);
+                            getUser()!.phoneNumber!);
                       return PostCardWidget(
                         isLiked: isLiked,
                         documentSnapshot: snapshot.data!.docs[index],

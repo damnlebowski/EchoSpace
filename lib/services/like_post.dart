@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class LikedPosts {
-  User? user = FirebaseAuth.instance.currentUser;
+  User? user = getUser();
 
   addLikePost({required Map<String, dynamic> post}) async {
     final ref = FirebaseFirestore.instance;

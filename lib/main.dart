@@ -1,9 +1,9 @@
-import 'package:echospace/views/screen_splash/screen_splash.dart';
+import 'package:echospace/views/splash_screen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
-import 'core/constants/colors.dart';
+import 'utils/constants/colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

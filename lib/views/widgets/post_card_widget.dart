@@ -1,16 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:echospace/core/constants/colors.dart';
-import 'package:echospace/core/constants/widgets.dart';
-import 'package:echospace/services/saved_post.dart';
+import 'package:echospace/controllers/post_card_controller.dart';
+import 'package:echospace/utils/constants/colors.dart';
+import 'package:echospace/utils/constants/widgets.dart';
+import 'package:echospace/utils/functions/date_time.dart';
+import 'package:echospace/utils/functions/like_post.dart';
+import 'package:echospace/utils/functions/save_post.dart';
 import 'package:echospace/views/image_view_screen/image_view_screen.dart';
-import 'package:echospace/views/screen_home/screen_home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
 class PostCardWidget extends StatelessWidget {
-  const PostCardWidget(
+  PostCardWidget(
       {super.key,
       required this.isLiked,
       required this.documentSnapshot,
@@ -18,10 +20,16 @@ class PostCardWidget extends StatelessWidget {
 
   final bool isLiked;
   final bool isSaved;
+
+  PostCardController postObj = PostCardController();
+
   final QueryDocumentSnapshot<Map<String, dynamic>> documentSnapshot;
 
   @override
   Widget build(BuildContext context) {
+    postObj.savedToRxSaved(isSaved);
+    postObj.likedToRxLiked(
+        isLiked, (documentSnapshot.data()['likes'] as List<dynamic>).length);
     return Padding(
       padding: const EdgeInsets.only(left: 12, right: 12, top: 10, bottom: 10),
       child: Column(
@@ -67,22 +75,31 @@ class PostCardWidget extends StatelessWidget {
                     kWidth10,
                     GestureDetector(
                       onTap: () async {
-                        String mobile =
-                            FirebaseAuth.instance.currentUser!.phoneNumber!;
+                        String mobile = getUser()!.phoneNumber!;
 
-                        likePost(mobile, documentSnapshot.data());
+                        postObj.isLiked.value =
+                            await likePost(mobile, documentSnapshot.data());
+
+                        if (postObj.isLiked.value) {
+                          postObj.likes.value++;
+                        } else {
+                          postObj.likes.value--;
+                        }
                       },
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.arrow_circle_up_outlined,
-                            color: isLiked ? kRed : kWhite,
-                          ),
-                          Text(
-                            '  ${(documentSnapshot.data()['likes'] as List<dynamic>).length} Likes',
-                            style: TextStyle(color: isLiked ? kRed : kWhite),
-                          )
-                        ],
+                      child: Obx(
+                        () => Row(
+                          children: [
+                            Icon(
+                              Icons.arrow_circle_up_outlined,
+                              color: postObj.isLiked.value ? kRed : kWhite,
+                            ),
+                            Text(
+                              '  ${postObj.likes.value} Likes',
+                              style: TextStyle(
+                                  color: postObj.isLiked.value ? kRed : kWhite),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                     const Spacer(),
@@ -106,14 +123,16 @@ class PostCardWidget extends StatelessWidget {
                     const Spacer(),
                     IconButton(
                         onPressed: () async {
-                          String mobile =
-                              FirebaseAuth.instance.currentUser!.phoneNumber!;
+                          String mobile = getUser()!.phoneNumber!;
 
-                          savePost(mobile, documentSnapshot.data());
+                          postObj.isSaved.value =
+                              await savePost(mobile, documentSnapshot.data());
                         },
-                        icon: Icon(
-                          Icons.save_outlined,
-                          color: isSaved ? kRed : kWhite,
+                        icon: Obx(
+                          () => Icon(
+                            Icons.save_outlined,
+                            color: postObj.isSaved.value ? kRed : kWhite,
+                          ),
                         )),
                     kWidth10,
                   ],

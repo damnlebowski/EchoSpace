@@ -26,7 +26,7 @@ class UserModel {
         'connections': connections,
       };
 
-  UserModel fromJson(Map<String, dynamic> json) => UserModel(
+ static UserModel fromJson(Map<String, dynamic> json) => UserModel(
         mobile: json['mobile'],
         name: json['name'],
         userName: json['userName'],

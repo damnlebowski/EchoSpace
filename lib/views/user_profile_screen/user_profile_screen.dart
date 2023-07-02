@@ -1,27 +1,27 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields, unused_local_variable, avoid_print
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:echospace/core/constants/colors.dart';
-import 'package:echospace/core/constants/widgets.dart';
-import 'package:echospace/views/screen_post_view/screen_post_view.dart';
+import 'package:echospace/controllers/user_profile_connected_controller.dart';
+import 'package:echospace/utils/constants/colors.dart';
+import 'package:echospace/utils/constants/widgets.dart';
+import 'package:echospace/views/main_screen/main_screen.dart';
+import 'package:echospace/views/user_profile_screen/widgets/search_user_post_grid.dart';
 import 'package:echospace/views/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class UserProfilePage extends StatefulWidget {
+class UserProfilePage extends StatelessWidget {
   UserProfilePage(
       {super.key, required this.userMobile, required this.isConnected});
   final String userMobile;
   bool isConnected;
+  ConnectedController obj = ConnectedController();
 
-  @override
-  State<UserProfilePage> createState() => _UserProfilePageState();
-}
-
-class _UserProfilePageState extends State<UserProfilePage> {
   @override
   Widget build(BuildContext context) {
+    obj.changeToRxIsConnected(isConnected);
+
     return Scaffold(
       backgroundColor: kBgBlack,
       appBar: AppBar(
@@ -44,7 +44,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('user_details')
-                      .doc(widget.userMobile)
+                      .doc(userMobile)
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.data == null) {
@@ -63,45 +63,47 @@ class _UserProfilePageState extends State<UserProfilePage> {
                             Spacer(),
                             InkWell(
                               onTap: () async {
-                                widget.isConnected = await connectAndDisconnect(
-                                    widget.userMobile);
-                                setState(() {});
+                                obj.isConnected.value =
+                                    await connectAndDisconnect(
+                                        userMobile);
                               },
-                              child: Visibility(
-                                visible: FirebaseAuth
-                                        .instance.currentUser!.phoneNumber !=
-                                    snapshot.data?.get('mobile'),
-                                child: !widget.isConnected
-                                    ? Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: kRed,
-                                        ),
-                                        height: 30,
-                                        width: 100,
-                                        child: Center(
-                                          child: Text(
-                                            'Connect',
-                                            style: TextStyle(color: kWhite),
+                              child: Obx(
+                                () => Visibility(
+                                  visible: FirebaseAuth
+                                          .instance.currentUser!.phoneNumber !=
+                                      snapshot.data?.get('mobile'),
+                                  child: !obj.isConnected.value
+                                      ? Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: kRed,
+                                          ),
+                                          height: 30,
+                                          width: 100,
+                                          child: Center(
+                                            child: Text(
+                                              'Connect',
+                                              style: TextStyle(color: kWhite),
+                                            ),
+                                          ),
+                                        )
+                                      : Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: kInactiveColor,
+                                          ),
+                                          height: 30,
+                                          width: 100,
+                                          child: Center(
+                                            child: Text(
+                                              'Connected',
+                                              style: TextStyle(color: kWhite),
+                                            ),
                                           ),
                                         ),
-                                      )
-                                    : Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          color: kInactiveColor,
-                                        ),
-                                        height: 30,
-                                        width: 100,
-                                        child: Center(
-                                          child: Text(
-                                            'Connected',
-                                            style: TextStyle(color: kWhite),
-                                          ),
-                                        ),
-                                      ),
+                                ),
                               ),
                             ),
                             kWidth10
@@ -193,47 +195,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               ),
               const CustomText(label: 'Posts'),
               kHeight10,
-              StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('user_posts')
-                      .where('mobile', isEqualTo: widget.userMobile)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.data == null) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    if (snapshot.data!.docs.isEmpty) {
-                      return const Center(
-                          child: CustomText(
-                        label: 'No Posts Yet..',
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ));
-                    }
-                    return GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: snapshot.data?.docs.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 10,
-                              crossAxisSpacing: 10),
-                      itemBuilder: (context, index) => InkWell(
-                        onTap: () {
-                          Get.to(() => ViewPostPage(
-                              documentSnapshot: snapshot.data!.docs[index]));
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    fit: BoxFit.fill,
-                                    image: NetworkImage(snapshot
-                                        .data?.docs[index]
-                                        .get('imageUrl'))))),
-                      ),
-                    );
-                  }),
+              SearchUserPostGrid(userMobile: userMobile),
               kHeight25,
             ],
           ),
@@ -244,7 +206,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 }
 
 Future<bool> connectAndDisconnect(String mobile) async {
-  final user = FirebaseAuth.instance.currentUser;
+  final user = getUser();
   final docRef = FirebaseFirestore.instance
       .collection('user_details')
       .doc(user!.phoneNumber);

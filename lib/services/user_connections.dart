@@ -1,16 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:echospace/models/user_model.dart';
+import 'package:echospace/services/user_details.dart';
+import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserConnections {
 //to retrive all connections of a user
-  Future<List<dynamic>> getAllConnections() async {
-    List<dynamic> connections = [];
+  Future<List<UserModel>> getAllConnections() async {
+    List connections = [];
+    List<UserModel> connectionUsers = [];
 
     try {
       DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
           await FirebaseFirestore.instance
               .collection('user_details')
-              .doc(FirebaseAuth.instance.currentUser?.phoneNumber!)
+              .doc(getUser()?.phoneNumber!)
               .get();
 
       connections = documentSnapshot.get('connections');
@@ -20,10 +24,14 @@ class UserConnections {
       print('Error retrieving field values: $e');
     }
 
-    return connections;
+    for (var element in connections) {
+      final json = await UserDetails().fetchDetailsOfUser(element);
+
+      UserModel model = UserModel.fromJson(json.data() as Map<String, dynamic>);
+
+      connectionUsers.add(model);
+    }
+
+    return connectionUsers;
   }
-
-  // void removeConnection({required docId}) {}
-
-  // void addConnection({required Map<String, dynamic> post}) {}
 }

@@ -2,14 +2,16 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echospace/models/post_models.dart';
+import 'package:echospace/services/post_count.dart';
 import 'package:echospace/services/upload_post_firebase.dart';
 import 'package:echospace/services/user_details.dart';
+import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UserPost {
   Future<void> createPost(File image, String title) async {
-    User? user = FirebaseAuth.instance.currentUser;
+    User? user = getUser();
 
     try {
       CollectionReference userPostsCollection =
@@ -46,6 +48,8 @@ class UserPost {
         });
       }
 
+      await PostCount().increment();
+
       print('Comments stored successfully');
     } catch (e) {
       print('Error creating post: $e');
@@ -58,6 +62,7 @@ class UserPost {
           FirebaseFirestore.instance.collection('user_posts');
 
       await userPostsCollection.doc(postId).delete();
+      await PostCount().decrement();
     } on FirebaseAuthException catch (e) {
       print(e);
     }

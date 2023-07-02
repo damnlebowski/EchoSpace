@@ -1,8 +1,8 @@
 import 'dart:developer';
-import 'package:echospace/core/constants/colors.dart';
-import 'package:echospace/core/constants/widgets.dart';
+import 'package:echospace/utils/constants/colors.dart';
+import 'package:echospace/utils/constants/widgets.dart';
 import 'package:echospace/services/otp_auth_services.dart';
-import 'package:echospace/views/screen_login_otp/screen_login_otp.dart';
+import 'package:echospace/views/otp_screen/otp_screen.dart';
 import 'package:echospace/views/widgets/button_widget.dart';
 import 'package:echospace/views/widgets/textform_widget.dart';
 import 'package:flutter/gestures.dart';
@@ -65,7 +65,7 @@ class MobileLoginPage extends StatelessWidget {
                     if (!_formKey.currentState!.validate()) return;
 
                     //send otp
-                    authObj.sendOtp('+91${mobileController.text.trim()}');
+                    sendOtp();
 
                     //navigate to otp section
                     Get.to(() => CheckLoginOtp(
@@ -123,5 +123,9 @@ class MobileLoginPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  sendOtp() async {
+    await authObj.sendOtp('+91${mobileController.text.trim()}');
   }
 }

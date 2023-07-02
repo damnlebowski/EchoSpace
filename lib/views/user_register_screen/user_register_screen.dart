@@ -1,7 +1,7 @@
-import 'package:echospace/core/constants/colors.dart';
+import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/services/username_availablity.dart';
 import 'package:echospace/views/add_avatar_screen/add_avatar_screen.dart';
-import 'package:echospace/views/screen_login/screen_login.dart';
+import 'package:echospace/views/login_screen/login_screen.dart';
 import 'package:echospace/views/widgets/button_widget.dart';
 import 'package:echospace/views/widgets/textform_widget.dart';
 import 'package:flutter/material.dart';
@@ -87,22 +87,7 @@ class RegisterPage extends StatelessWidget {
                 ButtonWidget(
                     label: 'Continue',
                     onTap: () async {
-                      //checking username availablity
-                      bool userNameAvailable = await UserNameList()
-                          .checkForUsernameAvailablity(
-                              usernameController.text.trim());
-                      if (!_formKey.currentState!.validate()) return;
-                      if (!userNameAvailable) {
-                        Get.snackbar(
-                          'Error',
-                          'Username already taken.',
-                          snackPosition: SnackPosition.BOTTOM,
-                          backgroundColor: Colors.grey[800],
-                          colorText: Colors.red,
-                          duration: const Duration(seconds: 2),
-                        );
-                        return;
-                      }
+                      onRegister();
 
                       Get.to(() => AddAvatarPage(profileDetails: {
                             'name': nameController.text.trim(),
@@ -117,4 +102,33 @@ class RegisterPage extends StatelessWidget {
       ),
     );
   }
+
+  void onRegister() async {
+    //checking username availablity
+    bool userNameAvailable = await UserNameList()
+        .checkForUsernameAvailablity(usernameController.text.trim());
+    if (!_formKey.currentState!.validate()) return;
+
+    if (!userNameAvailable) {
+      snack('Error', 'Username already taken.');
+      return;
+    }
+  }
+}
+
+snack(String title, String subtitle) {
+  if (Get.isSnackbarOpen) {
+    Get.back();
+  }
+
+  Get.snackbar(
+    title,
+    subtitle,
+    snackPosition: SnackPosition.TOP,
+    backgroundColor: Colors.grey[800],
+    colorText: Colors.red,
+    duration: const Duration(seconds: 2),
+    animationDuration: const Duration(milliseconds: 100),
+    snackStyle: SnackStyle.FLOATING,
+  );
 }

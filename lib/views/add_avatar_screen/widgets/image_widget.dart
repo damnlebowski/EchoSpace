@@ -1,4 +1,4 @@
-import 'package:echospace/core/constants/colors.dart';
+import 'package:echospace/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class InAppImage extends StatelessWidget {

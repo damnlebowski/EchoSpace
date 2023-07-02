@@ -1,7 +1,7 @@
-import 'package:echospace/core/constants/colors.dart';
+import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/services/user_details.dart';
-import 'package:echospace/views/screen_login/screen_login.dart';
-import 'package:echospace/views/screen_main/screen_main.dart';
+import 'package:echospace/views/login_screen/login_screen.dart';
+import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/user_register_screen/user_register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +9,11 @@ import 'package:get/get.dart';
 
 class Splash extends StatelessWidget {
   Splash({super.key});
-  // HomeController obj = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      User? userLogin = FirebaseAuth.instance.currentUser;
+      User? userLogin = getUser();
       bool isExisist = false;
       if (userLogin != null) {
         isExisist = await UserDetails().isUserIdExists(userLogin.phoneNumber!);

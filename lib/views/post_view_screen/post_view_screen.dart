@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:echospace/core/constants/colors.dart';
+import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/services/upload_post_firebase.dart';
 import 'package:echospace/services/user_post.dart';
+import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/widgets/post_card_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,9 +15,9 @@ class ViewPostPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isLiked = (documentSnapshot['likes'] as List<dynamic>)
-        .contains(FirebaseAuth.instance.currentUser!.phoneNumber!);
+        .contains(getUser()!.phoneNumber!);
     bool isSaved = (documentSnapshot['saved'] as List<dynamic>)
-        .contains(FirebaseAuth.instance.currentUser!.phoneNumber!);
+        .contains(getUser()!.phoneNumber!);
     return Scaffold(
       backgroundColor: kBgBlack,
       appBar: AppBar(
@@ -32,8 +32,7 @@ class ViewPostPage extends StatelessWidget {
             )),
         actions: [
           Visibility(
-            visible: FirebaseAuth.instance.currentUser!.phoneNumber ==
-                documentSnapshot.data()['mobile'],
+            visible: getUser()!.phoneNumber == documentSnapshot.data()['mobile'],
             child: IconButton(
                 onPressed: () {
                   String postId = documentSnapshot.data()['postId'];

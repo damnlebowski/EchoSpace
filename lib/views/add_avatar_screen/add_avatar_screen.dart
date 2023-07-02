@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'package:echospace/controllers/avatar_controller.dart';
-import 'package:echospace/core/constants/colors.dart';
-import 'package:echospace/core/constants/widgets.dart';
+import 'package:echospace/utils/constants/colors.dart';
+import 'package:echospace/utils/constants/widgets.dart';
 import 'package:echospace/models/user_model.dart';
 import 'package:echospace/services/uplode_profile_image_firebase_storage.dart';
 import 'package:echospace/services/user_details.dart';
 import 'package:echospace/views/add_avatar_screen/widgets/image_widget.dart';
-import 'package:echospace/views/pick_and_crop_image.dart';
-import 'package:echospace/views/screen_main/screen_main.dart';
+import 'package:echospace/utils/functions/pick_and_crop_image.dart';
+import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -66,9 +66,9 @@ class AddAvatarPage extends StatelessWidget {
                 child: Obx(
                   () => CircleAvatar(
                     radius: 120,
-                    backgroundImage: avatarObj.galleryImg == ''.obs
-                        ? NetworkImage(avatarObj.appImg.value)
-                        : FileImage(File(avatarObj.galleryImg.value))
+                    backgroundImage: avatarObj.galleryImg.value == null
+                        ? NetworkImage(avatarObj.appImg.value!)
+                        : FileImage(File(avatarObj.galleryImg.value!))
                             as ImageProvider,
                   ),
                 ),
@@ -141,19 +141,20 @@ class AddAvatarPage extends StatelessWidget {
 
   Future<void> takePhoto() async {
     File? tempImgFile = await PickAndCrop().pickImage(ImageSource.gallery);
+
     XFile? pickedFile = XFile(tempImgFile!.path);
-    if (pickedFile != null) {
-      avatarObj.galleryImg.value = pickedFile.path;
-      avatarObj.appImg.value = '';
-      imgFile = pickedFile;
-    }
+
+    avatarObj.galleryImg.value = pickedFile.path;
+
+    avatarObj.appImg = null.obs;
+    imgFile = pickedFile;
   }
 
   uploadDetails() async {
-    User? user = FirebaseAuth.instance.currentUser;
+    User? user = getUser();
 
     String? imgUrl;
-    if (avatarObj.appImg.value == '') {
+    if (avatarObj.appImg.value == null) {
       //uploading image to firebase and getting the network url back
       imgUrl = await UplodeProfileImageFirebase()
           .imageToUrlProfilePic(user!.phoneNumber!, imgFile!);
@@ -166,7 +167,7 @@ class AddAvatarPage extends StatelessWidget {
         name: (profileDetails['name']!).toLowerCase(),
         userName: (profileDetails['userName']!).toLowerCase(),
         profilePhoto:
-            avatarObj.appImg.value == '' ? imgUrl! : avatarObj.appImg.value,
+            avatarObj.appImg.value == null ? imgUrl! : avatarObj.appImg.value!,
         bio: 'I am using EchoSpace',
         posts: 0,
         connections: []);

@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:echospace/core/constants/colors.dart';
-import 'package:echospace/core/constants/widgets.dart';
+import 'package:echospace/utils/constants/colors.dart';
+import 'package:echospace/utils/constants/widgets.dart';
 import 'package:echospace/services/user_connections.dart';
 import 'package:echospace/services/user_details.dart';
-import 'package:echospace/views/screen_home/screen_home.dart';
-import 'package:echospace/views/screen_login/screen_login.dart';
-import 'package:echospace/views/screen_main/screen_main.dart';
+import 'package:echospace/views/home_screen/home_screen.dart';
+import 'package:echospace/views/login_screen/login_screen.dart';
+import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/user_register_screen/user_register_screen.dart';
 import 'package:echospace/views/widgets/button_widget.dart';
 import 'package:echospace/views/widgets/textform_widget.dart';
@@ -72,7 +72,7 @@ class CheckLoginOtp extends StatelessWidget {
             const Expanded(child: SizedBox()),
             ButtonWidget(
                 label: 'Continue',
-                onTap: () async {
+                onTap: ()  {
                   verifyOtp(otpController.text.trim());
                 },
                 buttonColor: kRed)
@@ -88,7 +88,6 @@ class CheckLoginOtp extends StatelessWidget {
       bool isExisist = await UserDetails().isUserIdExists(mobile);
       if (isExisist) {
         Get.offAll(MainScreen());
-        // await UserConnections().getAllConnectionPost();
       } else {
         Get.offAll(RegisterPage());
       }
