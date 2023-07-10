@@ -3,7 +3,6 @@ import 'package:echospace/services/like_post.dart';
 import 'package:echospace/services/saved_post.dart';
 import 'package:echospace/views/liked_post_screen/liked_post_screen.dart';
 import 'package:echospace/views/saved_post_screen/saved_post_screen.dart';
-import 'package:echospace/views/user_register_screen/user_register_screen.dart';
 import 'package:echospace/views/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -71,9 +70,7 @@ class DrawerWidget extends StatelessWidget {
               label: "Settings",
               fontSize: 16,
             ),
-            onTap: () {
-              snack('aaaaaaaaaa', 'subtitle');
-            },
+            onTap: () {},
           ),
           ListTile(
             leading: const Icon(

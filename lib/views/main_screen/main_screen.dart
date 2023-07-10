@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:echospace/controllers/internet_connectivity_controller.dart';
 import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/services/like_post.dart';
 import 'package:echospace/services/saved_post.dart';
@@ -12,6 +13,7 @@ import 'package:echospace/views/main_screen/widgets/bottom_navigation_widget.dar
 import 'package:echospace/views/main_screen/widgets/drawer_widget.dart';
 import 'package:echospace/views/profile_screen/profile_screen.dart';
 import 'package:echospace/views/search_screen/search_screen.dart';
+import 'package:echospace/views/splash_screen/splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,46 +29,54 @@ class MainScreen extends StatelessWidget {
   final List<Widget> screens = [
     HomeScreen(),
     CreatePostScreen(),
-    const ChatScreen(),
+    ChatScreen(),
     ProfilePage(),
   ];
 
+    final ConnectivityService connectivityService = Get.find();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kBgBlack,
-      appBar: AppBar(
+    return Obx(() {
+      if (!connectivityService.hasInternetConnection.value) {
+         return connectivityService.showAlert(context);
+        }
+      return Scaffold(
         backgroundColor: kBgBlack,
-        elevation: 2,
-        iconTheme: const IconThemeData(color: kWhite),
-        title: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: kInactiveColor,
-          ),
-          height: 24,
-          width: 70,
-          child: Center(
-            child: Obx(
-              () => Text(
-                widgetTitle.value,
-                style: const TextStyle(color: kWhite, fontSize: 18),
+        appBar: AppBar(
+          backgroundColor: kBgBlack,
+          elevation: 2,
+          iconTheme: const IconThemeData(color: kWhite),
+          title: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: kInactiveColor,
+            ),
+            height: 24,
+            width: 70,
+            child: Center(
+              child: Obx(
+                () => Text(
+                  widgetTitle.value,
+                  style: const TextStyle(color: kWhite, fontSize: 18),
+                ),
               ),
             ),
           ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  Get.to(() => SearchScreen());
+                },
+                icon: const Icon(Icons.search))
+          ],
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Get.to(() => SearchScreen());
-              },
-              icon: const Icon(Icons.search))
-        ],
-      ),
-      drawer: DrawerWidget(),
-      body: Obx(() => screens[selectedIndex.value]),
-      bottomNavigationBar: BottomNavigationWidget(
-          selectedIndex: selectedIndex, widgetTitle: widgetTitle),
+        drawer: DrawerWidget(),
+        body: Obx(() => screens[selectedIndex.value]),
+        bottomNavigationBar: BottomNavigationWidget(
+            selectedIndex: selectedIndex, widgetTitle: widgetTitle),
+      );
+    },
     );
   }
 }

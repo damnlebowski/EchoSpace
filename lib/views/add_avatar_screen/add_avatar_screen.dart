@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:echospace/controllers/avatar_controller.dart';
+import 'package:echospace/controllers/internet_connectivity_controller.dart';
 import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/utils/constants/widgets.dart';
 import 'package:echospace/models/user_model.dart';
@@ -24,6 +25,8 @@ class AddAvatarPage extends StatelessWidget {
   final Map<String, String> profileDetails;
   @override
   Widget build(BuildContext context) {
+    final ConnectivityService connectivityService = Get.find();
+
     List<String> imgList = [
       'https://firebasestorage.googleapis.com/v0/b/echospace-7dbf6.appspot.com/o/costume_image%2Fimg01.jpg?alt=media&token=7badbe39-7e2e-42f3-ac39-e2d30ab51ec3',
       'https://firebasestorage.googleapis.com/v0/b/echospace-7dbf6.appspot.com/o/costume_image%2Fimg02.jpg?alt=media&token=2c665be4-f789-4717-8971-bc02dbae2826',
@@ -36,106 +39,116 @@ class AddAvatarPage extends StatelessWidget {
       'https://firebasestorage.googleapis.com/v0/b/echospace-7dbf6.appspot.com/o/costume_image%2Fimg09.jpg?alt=media&token=09b33369-a329-4e02-865f-fa4beb64b4c1',
       'https://firebasestorage.googleapis.com/v0/b/echospace-7dbf6.appspot.com/o/costume_image%2Fimg10.jpg?alt=media&token=b63122fd-460a-4537-95a7-a20d4507eb24'
     ];
-    return Scaffold(
-      backgroundColor: kBgBlack,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(
-              Icons.arrow_back,
-              color: kWhite,
-            )),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: kBgBlack,
-        title: Image.asset(
-          'assests/EchoSpace.png',
-          width: 200,
-        ),
-      ),
-      body: Center(
-        child: Column(children: [
-          kHeight10,
-          Stack(
-            children: [
-              SizedBox(
-                width: double.infinity,
-                child: Obx(
-                  () => CircleAvatar(
-                    radius: 120,
-                    backgroundImage: avatarObj.galleryImg.value == null
-                        ? NetworkImage(avatarObj.appImg.value!)
-                        : FileImage(File(avatarObj.galleryImg.value!))
-                            as ImageProvider,
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 10,
-                child: InkWell(
-                  onTap: () {
-                    takePhoto();
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: kInactiveColor,
-                        borderRadius: BorderRadius.circular(15)),
-                    height: 50,
-                    width: 50,
-                    child: const Icon(
-                      Icons.image,
-                      color: kWhite,
+    return Obx(
+      () {
+        if (!connectivityService.hasInternetConnection.value) {
+         return connectivityService.showAlert(context);
+        }
+        return Scaffold(
+          backgroundColor: kBgBlack,
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: kWhite,
+                )),
+            centerTitle: true,
+            elevation: 0,
+            backgroundColor: kBgBlack,
+            title: Image.asset(
+              'assests/EchoSpace.png',
+              width: 200,
+            ),
+          ),
+          body: Center(
+            child: Column(children: [
+              kHeight10,
+              Stack(
+                children: [
+                  SizedBox(
+                    width: double.infinity,
+                    child: Obx(
+                      () => CircleAvatar(
+                        radius: 120,
+                        backgroundImage: avatarObj.galleryImg.value == null
+                            ? NetworkImage(avatarObj.appImg.value!)
+                            : FileImage(File(avatarObj.galleryImg.value!))
+                                as ImageProvider,
+                      ),
                     ),
                   ),
+                  Positioned(
+                    bottom: 0,
+                    right: 10,
+                    child: InkWell(
+                      onTap: () {
+                        takePhoto();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: kInactiveColor,
+                            borderRadius: BorderRadius.circular(15)),
+                        height: 50,
+                        width: 50,
+                        child: const Icon(
+                          Icons.image,
+                          color: kWhite,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              kHeight10,
+              const Divider(
+                color: kInactiveColor,
+              ),
+              Expanded(
+                  child: Padding(
+                padding: const EdgeInsets.all(10),
+                child: GridView.builder(
+                  itemCount: imgList.length,
+                  itemBuilder: (context, index) => InkWell(
+                      onTap: () {
+                        avatarObj.onClick(imgList[index]);
+                      },
+                      child: InAppImage(img: imgList[index])),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10),
                 ),
-              )
-            ],
+              ))
+            ]),
           ),
-          kHeight10,
-          const Divider(
-            color: kInactiveColor,
-          ),
-          Expanded(
-              child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: GridView.builder(
-              itemCount: imgList.length,
-              itemBuilder: (context, index) => InkWell(
-                  onTap: () {
-                    avatarObj.onClick(imgList[index]);
-                  },
-                  child: InAppImage(img: imgList[index])),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
-            ),
-          ))
-        ]),
-      ),
-      floatingActionButton: InkWell(
-        onTap: () async {
-          uploadDetails();
-        },
-        child: Container(
-          width: MediaQuery.of(context).size.width * .40,
-          height: MediaQuery.of(context).size.height * .07,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color: kRed,
-          ),
-          child: const Center(
-            child: Text(
-              'Save',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: kWhite, fontSize: 20),
+          floatingActionButton: InkWell(
+            onTap: () async {
+              uploadDetails();
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width * .40,
+              height: MediaQuery.of(context).size.height * .07,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                color: kRed,
+              ),
+              child: const Center(
+                child: Text(
+                  'Save',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: kWhite, fontSize: 20),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+        );
+      },
     );
   }
 

@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/post_view_screen/post_view_screen.dart';
@@ -6,19 +5,22 @@ import 'package:echospace/views/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProfileGridWidget extends StatelessWidget {
+class ProfileGridWidget extends StatefulWidget {
   const ProfileGridWidget({
     super.key,
   });
 
   @override
+  State<ProfileGridWidget> createState() => _ProfileGridWidgetState();
+}
+
+class _ProfileGridWidgetState extends State<ProfileGridWidget> {
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('user_posts')
-            .where('mobile',
-                isEqualTo:
-                  getUser()!.phoneNumber)
+            .where('mobile', isEqualTo: getUser()!.phoneNumber)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.data == null) {
@@ -36,22 +38,19 @@ class ProfileGridWidget extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: snapshot.data?.docs.length,
-            gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, mainAxisSpacing: 10, crossAxisSpacing: 10),
             itemBuilder: (context, index) => InkWell(
               onTap: () {
-                Get.to(() => ViewPostPage(
-                    documentSnapshot: snapshot.data!.docs[index]));
+                Get.to(() =>
+                    ViewPostPage(documentSnapshot: snapshot.data!.docs[index]));
               },
               child: Container(
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           fit: BoxFit.fill,
-                          image: NetworkImage(snapshot.data?.docs[index]
-                              .get('imageUrl'))))),
+                          image: NetworkImage(
+                              snapshot.data?.docs[index].get('imageUrl'))))),
             ),
           );
         });
