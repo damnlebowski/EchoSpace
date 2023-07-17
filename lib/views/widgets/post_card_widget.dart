@@ -1,8 +1,5 @@
-// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echospace/controllers/post_card_controller.dart';
-import 'package:echospace/services/user_post.dart';
 import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/utils/constants/widgets.dart';
 import 'package:echospace/utils/functions/date_time.dart';
@@ -13,6 +10,7 @@ import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/widgets/post_comments.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:echospace/utils/functions/get_user.dart';
 import 'package:share_plus/share_plus.dart';
 
 class PostCardWidget extends StatelessWidget {
@@ -80,7 +78,6 @@ class PostCardWidget extends StatelessWidget {
                     GestureDetector(
                       onTap: () async {
                         String mobile = getUser()!.phoneNumber!;
-
                         postObj.isLiked.value =
                             await likePost(mobile, documentSnapshot.data());
 

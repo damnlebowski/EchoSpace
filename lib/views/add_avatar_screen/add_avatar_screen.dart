@@ -12,6 +12,7 @@ import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:echospace/utils/functions/get_user.dart';
 import 'package:image_picker/image_picker.dart';
 
 XFile? imgFile;
@@ -42,7 +43,7 @@ class AddAvatarPage extends StatelessWidget {
     return Obx(
       () {
         if (!connectivityService.hasInternetConnection.value) {
-         return connectivityService.showAlert(context);
+          return connectivityService.showAlert(context);
         }
         return Scaffold(
           backgroundColor: kBgBlack,
@@ -187,6 +188,6 @@ class AddAvatarPage extends StatelessWidget {
 
     //save user details to firebase
     UserDetails().addDetailsOfUser(model);
-    Get.to(() => MainScreen());
+    Get.offAll(MainScreen());
   }
 }

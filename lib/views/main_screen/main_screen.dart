@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:echospace/controllers/internet_connectivity_controller.dart';
+import 'package:echospace/controllers/main_page_controller.dart';
 import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/services/like_post.dart';
 import 'package:echospace/services/saved_post.dart';
@@ -23,8 +24,7 @@ class MainScreen extends StatelessWidget {
     super.key,
   });
 
-  final RxInt selectedIndex = 0.obs;
-  final RxString widgetTitle = 'Home'.obs;
+  MainPageController obj = MainPageController();
 
   final List<Widget> screens = [
     HomeScreen(),
@@ -33,55 +33,52 @@ class MainScreen extends StatelessWidget {
     ProfilePage(),
   ];
 
-    final ConnectivityService connectivityService = Get.find();
+  final ConnectivityService connectivityService = Get.find();
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (!connectivityService.hasInternetConnection.value) {
-         return connectivityService.showAlert(context);
+    return Obx(
+      () {
+        if (!connectivityService.hasInternetConnection.value) {
+          return connectivityService.showAlert(context);
         }
-      return Scaffold(
-        backgroundColor: kBgBlack,
-        appBar: AppBar(
+        return Scaffold(
           backgroundColor: kBgBlack,
-          elevation: 2,
-          iconTheme: const IconThemeData(color: kWhite),
-          title: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: kInactiveColor,
-            ),
-            height: 24,
-            width: 70,
-            child: Center(
-              child: Obx(
-                () => Text(
-                  widgetTitle.value,
-                  style: const TextStyle(color: kWhite, fontSize: 18),
+          appBar: AppBar(
+            backgroundColor: kBgBlack,
+            elevation: 2,
+            iconTheme: const IconThemeData(color: kWhite),
+            title: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: kInactiveColor,
+              ),
+              height: 24,
+              width: 70,
+              child: Center(
+                child: Obx(
+                  () => Text(
+                    obj.widgetTitle.value,
+                    style: const TextStyle(color: kWhite, fontSize: 18),
+                  ),
                 ),
               ),
             ),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    Get.to(() => SearchScreen());
+                  },
+                  icon: const Icon(Icons.search))
+            ],
           ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  Get.to(() => SearchScreen());
-                },
-                icon: const Icon(Icons.search))
-          ],
-        ),
-        drawer: DrawerWidget(),
-        body: Obx(() => screens[selectedIndex.value]),
-        bottomNavigationBar: BottomNavigationWidget(
-            selectedIndex: selectedIndex, widgetTitle: widgetTitle),
-      );
-    },
+          drawer: DrawerWidget(),
+          body: Obx(() => screens[obj.selectedIndex.value]),
+          bottomNavigationBar: BottomNavigationWidget(
+              selectedIndex: obj.selectedIndex, widgetTitle: obj.widgetTitle),
+        );
+      },
     );
   }
 }
 
-User? getUser() {
-  User? user = FirebaseAuth.instance.currentUser;
-  return user;
-}

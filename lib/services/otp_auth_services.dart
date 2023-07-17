@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class OtpAuth {
@@ -29,6 +30,15 @@ class OtpAuth {
     } on FirebaseAuthException catch (e) {
       print(e);
       return false;
+    }
+  }
+  
+  Future<void> logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      print('User logged out successfully.');
+    } catch (e) {
+      print('Failed to log out the user: $e');
     }
   }
 }

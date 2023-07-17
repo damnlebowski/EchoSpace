@@ -9,6 +9,7 @@ import 'package:echospace/views/profile_screen/widgets/edit_profile_widget.dart'
 import 'package:echospace/views/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:echospace/utils/functions/get_user.dart';
 import 'package:get/get.dart';
 
 class ProfileDetailsWidget extends StatelessWidget {

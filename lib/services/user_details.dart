@@ -25,7 +25,4 @@ class UserDetails {
         .then((doc) => doc.exists);
     return isDocumentExists;
   }
-
-  
-
 }

@@ -7,10 +7,9 @@ import 'package:echospace/views/login_screen/login_screen.dart';
 import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/user_register_screen/user_register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:echospace/utils/functions/get_user.dart';
 import 'package:get/get.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 class Splash extends StatelessWidget {
   Splash({super.key});
@@ -22,7 +21,7 @@ class Splash extends StatelessWidget {
       isExisist = await UserDetails().isUserIdExists(userLogin.phoneNumber!);
     }
 
-    await Future.delayed(const Duration(milliseconds: 10), () async {
+    await Future.delayed(const Duration(milliseconds: 200), () async {
       if (userLogin == null) {
         Get.off(() => MobileLoginPage());
       }

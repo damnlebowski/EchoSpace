@@ -3,7 +3,9 @@ import 'package:echospace/controllers/search_controller.dart';
 import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/user_profile_screen/user_profile_screen.dart';
+import 'package:echospace/views/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:echospace/utils/functions/get_user.dart';
 import 'package:get/get.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -52,36 +54,41 @@ class SearchScreen extends StatelessWidget {
           ),
         ),
         body: Obx(
-          () => ListView.builder(
-            itemCount: searchObj.userList.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                onTap: () async {
-                  final bool isConnected = await checkConnection(
-                      searchObj.userList[index]['mobile']);
+          () => searchObj.userList.isNotEmpty
+              ? ListView.builder(
+                  itemCount: searchObj.userList.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () async {
+                        final bool isConnected = await checkConnection(
+                            searchObj.userList[index]['mobile']);
 
-                  Get.to(() => UserProfilePage(
-                        userMobile: searchObj.userList[index]['mobile'],
-                        isConnected: isConnected,
-                      ));
-                },
-                leading: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                    searchObj.userList[index]['profilePhoto'],
-                  ),
-                  radius: 25,
+                        Get.to(() => UserProfilePage(
+                              userMobile: searchObj.userList[index]['mobile'],
+                              isConnected: isConnected,
+                            ));
+                      },
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          searchObj.userList[index]['profilePhoto'],
+                        ),
+                        radius: 25,
+                      ),
+                      title: Text(
+                        (searchObj.userList[index]['name'] as String)
+                            .toUpperCase(),
+                        style: const TextStyle(color: kWhite),
+                      ),
+                      subtitle: Text(
+                        searchObj.userList[index]['userName'],
+                        style: const TextStyle(color: kWhite),
+                      ),
+                    );
+                  },
+                )
+              : const Center(
+                  child: CustomText(label: 'Search User'),
                 ),
-                title: Text(
-                  (searchObj.userList[index]['name'] as String).toUpperCase(),
-                  style: const TextStyle(color: kWhite),
-                ),
-                subtitle: Text(
-                  searchObj.userList[index]['userName'],
-                  style: const TextStyle(color: kWhite),
-                ),
-              );
-            },
-          ),
         ));
   }
 

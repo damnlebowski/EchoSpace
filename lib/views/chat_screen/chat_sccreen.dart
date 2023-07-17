@@ -4,6 +4,7 @@ import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/user_chat_screen/user_chat_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:echospace/utils/functions/get_user.dart';
 import 'package:get/get.dart';
 
 class ChatScreen extends StatelessWidget {
@@ -47,7 +48,7 @@ class ChatScreen extends StatelessWidget {
               return ListTile(
                 onTap: () {
                   Get.to(UserChat(
-                    sender: getUser()!.phoneNumber!,
+                    senderMobile: getUser()!.phoneNumber!,
                     receiver: model,
                   ));
                 },

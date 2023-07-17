@@ -1,4 +1,3 @@
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:echospace/utils/constants/colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,9 +14,7 @@ class ConnectivityService extends GetxController {
       content: const Text('Please check your internet connectivity'),
       actions: <Widget>[
         TextButton(
-          onPressed: () async {
-            // Navigator.pop(context, 'Cancel');
-          },
+          onPressed: () async {},
           child: const Text(
             'OK',
             style: TextStyle(color: kBgBlack),

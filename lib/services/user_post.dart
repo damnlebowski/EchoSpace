@@ -5,6 +5,7 @@ import 'package:echospace/models/post_models.dart';
 import 'package:echospace/services/post_count.dart';
 import 'package:echospace/services/upload_post_firebase.dart';
 import 'package:echospace/services/user_details.dart';
+import 'package:echospace/utils/functions/get_user.dart';
 import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';

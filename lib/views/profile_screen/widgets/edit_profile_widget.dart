@@ -9,6 +9,7 @@ import 'package:echospace/utils/functions/pick_and_crop_image.dart';
 import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:echospace/utils/functions/get_user.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProfileAlertDialog extends StatelessWidget {

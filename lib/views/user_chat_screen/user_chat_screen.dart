@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:echospace/models/user_model.dart';
 import 'package:echospace/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +7,10 @@ import 'package:get/get.dart';
 class UserChat extends StatelessWidget {
   UserChat({
     super.key,
-    required this.sender,
+    required this.senderMobile,
     required this.receiver,
   });
-  final String sender;
+  final String senderMobile;
   final UserModel receiver;
 
   final TextEditingController _messageController = TextEditingController();
@@ -27,7 +25,7 @@ class UserChat extends StatelessWidget {
 
     await collection.add({
       'text': message,
-      'sender': sender,
+      'sender': senderMobile,
       'receiver': receiver.mobile,
       'timestamp': DateTime.now(),
     });
@@ -35,7 +33,7 @@ class UserChat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    id = convId(sender, receiver.mobile);
+    id = convId(senderMobile, receiver.mobile);
 
     return Scaffold(
       backgroundColor: kBgBlack,
@@ -51,7 +49,7 @@ class UserChat extends StatelessWidget {
             )),
         title: Text(
           receiver.userName,
-          style: TextStyle(color: kWhite),
+          style: const TextStyle(color: kWhite),
         ),
       ),
       body: Column(
@@ -87,49 +85,52 @@ class UserChat extends StatelessWidget {
                   itemCount: snapshot.data?.docs.length ?? 0,
                   itemBuilder: (context, index) {
                     return Align(
-                      alignment: snapshot.data!.docs[index]['sender'] == sender
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
+                      alignment:
+                          snapshot.data!.docs[index]['sender'] == senderMobile
+                              ? Alignment.centerRight
+                              : Alignment.centerLeft,
                       child: Stack(
                         children: [
                           Container(
-                            margin:
-                                snapshot.data!.docs[index]['sender'] == sender
-                                    ? const EdgeInsets.fromLTRB(70, 10, 10, 10)
-                                    : const EdgeInsets.fromLTRB(10, 10, 70, 10),
-                            padding:
-                                snapshot.data!.docs[index]['sender'] == sender
-                                    ? const EdgeInsets.fromLTRB(10, 10, 20, 15)
-                                    : const EdgeInsets.fromLTRB(20, 10, 10, 15),
+                            margin: snapshot.data!.docs[index]['sender'] ==
+                                    senderMobile
+                                ? const EdgeInsets.fromLTRB(70, 10, 10, 10)
+                                : const EdgeInsets.fromLTRB(10, 10, 70, 10),
+                            padding: snapshot.data!.docs[index]['sender'] ==
+                                    senderMobile
+                                ? const EdgeInsets.fromLTRB(10, 10, 20, 15)
+                                : const EdgeInsets.fromLTRB(20, 10, 10, 15),
                             decoration: BoxDecoration(
-                              color:
-                                  snapshot.data!.docs[index]['sender'] == sender
-                                      ? kRed
-                                      : kRed,
+                              color: snapshot.data!.docs[index]['sender'] ==
+                                      senderMobile
+                                  ? Colors.redAccent
+                                  : kRed,
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                             child: Text(
                               snapshot.data!.docs[index]['text'],
-                              style: TextStyle(color: kWhite, fontSize: 18),
+                              style:
+                                  const TextStyle(color: kWhite, fontSize: 18),
                             ),
                           ),
                           Positioned(
                               bottom: 11,
-                              right:
-                                  snapshot.data!.docs[index]['sender'] == sender
-                                      ? 18
-                                      : null,
-                              left:
-                                  snapshot.data!.docs[index]['sender'] == sender
-                                      ? null
-                                      : 18,
+                              right: snapshot.data!.docs[index]['sender'] ==
+                                      senderMobile
+                                  ? 18
+                                  : null,
+                              left: snapshot.data!.docs[index]['sender'] ==
+                                      senderMobile
+                                  ? null
+                                  : 18,
                               child: Text(
                                 (snapshot.data?.docs[index]['timestamp']
                                         as Timestamp)
                                     .toDate()
                                     .toString()
                                     .substring(11, 16),
-                                style: TextStyle(color: kWhite, fontSize: 12),
+                                style: const TextStyle(
+                                    color: kWhite, fontSize: 12),
                               ))
                         ],
                       ),
@@ -146,15 +147,15 @@ class UserChat extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     textCapitalization: TextCapitalization.sentences,
-                    style: TextStyle(color: kWhite),
+                    style: const TextStyle(color: kWhite),
                     controller: _messageController,
                     decoration: const InputDecoration(
                         hintText: 'Type your message...',
-                        hintStyle: TextStyle(color: kWhite)),
+                        hintStyle: TextStyle(color: Colors.grey)),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.send,
                     color: kWhite,
                   ),

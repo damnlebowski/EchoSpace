@@ -1,8 +1,10 @@
 import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/services/like_post.dart';
 import 'package:echospace/services/saved_post.dart';
+import 'package:echospace/views/help_screen/help_screen.dart';
 import 'package:echospace/views/liked_post_screen/liked_post_screen.dart';
 import 'package:echospace/views/saved_post_screen/saved_post_screen.dart';
+import 'package:echospace/views/settings_screen/settings_screen.dart';
 import 'package:echospace/views/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -70,7 +72,9 @@ class DrawerWidget extends StatelessWidget {
               label: "Settings",
               fontSize: 16,
             ),
-            onTap: () {},
+            onTap: () {
+              Get.to(() => SettingsPage());
+            },
           ),
           ListTile(
             leading: const Icon(
@@ -81,7 +85,11 @@ class DrawerWidget extends StatelessWidget {
               label: 'Help',
               fontSize: 16,
             ),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => HelpPage(),
+              ));
+            },
           ),
           ListTile(
             leading: const Icon(
