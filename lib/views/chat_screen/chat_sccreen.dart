@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echospace/models/user_model.dart';
 import 'package:echospace/utils/constants/colors.dart';
-import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/user_chat_screen/user_chat_screen.dart';
+import 'package:echospace/views/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:echospace/utils/functions/get_user.dart';
 import 'package:get/get.dart';
@@ -33,6 +33,10 @@ class ChatScreen extends StatelessWidget {
                 style: TextStyle(color: kWhite, fontSize: 20),
               ),
             );
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CustomText(label: 'Loading...');
           }
 
           return ListView.builder(

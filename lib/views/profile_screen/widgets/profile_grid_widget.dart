@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/post_view_screen/post_view_screen.dart';
 import 'package:echospace/views/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +25,9 @@ class _ProfileGridWidgetState extends State<ProfileGridWidget> {
         builder: (context, snapshot) {
           if (snapshot.data == null) {
             return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
           }
           if (snapshot.data!.docs.isEmpty) {
             return const Center(

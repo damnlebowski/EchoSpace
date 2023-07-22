@@ -6,7 +6,6 @@ import 'package:echospace/controllers/edit_profile_widget_controller.dart';
 import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/services/uplode_profile_image_firebase_storage.dart';
 import 'package:echospace/utils/functions/pick_and_crop_image.dart';
-import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:echospace/utils/functions/get_user.dart';

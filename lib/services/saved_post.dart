@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echospace/utils/functions/get_user.dart';
-import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SavedPosts {

@@ -6,7 +6,6 @@ import 'package:echospace/utils/functions/date_time.dart';
 import 'package:echospace/utils/functions/like_post.dart';
 import 'package:echospace/utils/functions/save_post.dart';
 import 'package:echospace/views/image_view_screen/image_view_screen.dart';
-import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/widgets/post_comments.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -89,7 +89,7 @@ class CheckLoginOtp extends StatelessWidget {
   }
 
   verifyOtp(String otp) async {
-    bool verified = await authObj.verifyOtp(otp);
+    bool verified = await a.verifyOTP(a.userVerificationId, otp);
     if (verified) {
       bool isExisist = await UserDetails().isUserIdExists(mobile);
       if (isExisist) {

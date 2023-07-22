@@ -87,7 +87,7 @@ class CreatePostScreen extends StatelessWidget {
     );
   }
 
-   onPostClick() async {
+  onPostClick() async {
     await UserPost().createPost(obj.image.value!, titleController.text.trim());
     obj.image.value = null;
     titleController.text = '';

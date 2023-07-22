@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:echospace/controllers/internet_connectivity_controller.dart';
 import 'package:echospace/controllers/user_profile_connected_controller.dart';
 import 'package:echospace/models/user_model.dart';
 import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/utils/constants/widgets.dart';
-import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/user_chat_screen/user_chat_screen.dart';
 import 'package:echospace/views/user_profile_screen/widgets/search_user_post_grid.dart';
 import 'package:echospace/views/widgets/button_widget.dart';

@@ -4,10 +4,8 @@ import 'package:echospace/services/user_connections.dart';
 import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/utils/constants/widgets.dart';
 import 'package:echospace/views/connections_screen/connections_screen.dart';
-import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/profile_screen/widgets/edit_profile_widget.dart';
 import 'package:echospace/views/widgets/button_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:echospace/utils/functions/get_user.dart';
 import 'package:get/get.dart';
@@ -27,6 +25,9 @@ class ProfileDetailsWidget extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.data == null) {
             return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
           }
 
           List connections = snapshot.data?.get('connections');

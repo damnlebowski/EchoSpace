@@ -10,6 +10,8 @@ class PickAndCrop {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) return null;
       File? img = File(image.path);
+      print(image.path);
+      print(img.path);
       img = await _cropImage(imageFile: img);
       return img;
     } on PlatformException catch (e) {

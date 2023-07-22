@@ -73,7 +73,7 @@ class DrawerWidget extends StatelessWidget {
               fontSize: 16,
             ),
             onTap: () {
-              Get.to(() => SettingsPage());
+              Get.to(() => const SettingsPage());
             },
           ),
           ListTile(
@@ -87,7 +87,7 @@ class DrawerWidget extends StatelessWidget {
             ),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => HelpPage(),
+                builder: (context) => const HelpPage(),
               ));
             },
           ),

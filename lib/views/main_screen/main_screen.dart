@@ -3,10 +3,6 @@
 import 'package:echospace/controllers/internet_connectivity_controller.dart';
 import 'package:echospace/controllers/main_page_controller.dart';
 import 'package:echospace/utils/constants/colors.dart';
-import 'package:echospace/services/like_post.dart';
-import 'package:echospace/services/saved_post.dart';
-import 'package:echospace/services/user_post.dart';
-import 'package:echospace/views/liked_post_screen/liked_post_screen.dart';
 import 'package:echospace/views/chat_screen/chat_sccreen.dart';
 import 'package:echospace/views/create_post_screen/create_post_screen.dart';
 import 'package:echospace/views/home_screen/home_screen.dart';
@@ -14,8 +10,6 @@ import 'package:echospace/views/main_screen/widgets/bottom_navigation_widget.dar
 import 'package:echospace/views/main_screen/widgets/drawer_widget.dart';
 import 'package:echospace/views/profile_screen/profile_screen.dart';
 import 'package:echospace/views/search_screen/search_screen.dart';
-import 'package:echospace/views/splash_screen/splash_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

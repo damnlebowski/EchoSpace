@@ -1,38 +1,49 @@
-import 'dart:developer';
-import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class OtpAuth {
-  FirebaseAuth auth = FirebaseAuth.instance;
-  String verificationIdenty = '';
-  Future<void> sendOtp(String phoneNumber) async {
+class Auth {
+  String userVerificationId = '';
+
+  Future<void> sendOTP(String phoneNumber) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+
     await auth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       verificationCompleted: (PhoneAuthCredential credential) {},
       verificationFailed: (FirebaseAuthException e) {
-        print(e);
+        print('Verification failed: ${e.message}');
       },
-      codeSent: (String verificationId, int? resendToken) async {},
+      codeSent: (String verificationId, [int? forceResendingToken]) {
+        userVerificationId = verificationId;
+      },
       codeAutoRetrievalTimeout: (String verificationId) {
-        verificationIdenty = verificationId;
+        print('Code auto-retrieval timed out');
       },
+      timeout: const Duration(seconds: 5),
     );
   }
 
-  Future<bool> verifyOtp(String otp) async {
+  // Verifying the OTP
+  Future<bool> verifyOTP(String verificationId, String smsCode) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          verificationId: verificationIdenty, smsCode: otp);
+        verificationId: verificationId,
+        smsCode: smsCode,
+      );
 
-      await auth.signInWithCredential(credential);
-      log('Success');
+      UserCredential userCredential =
+          await auth.signInWithCredential(credential);
+
+      print(
+          'User ${userCredential.user?.uid} has been successfully authenticated.');
       return true;
-    } on FirebaseAuthException catch (e) {
-      print(e);
-      return false;
+    } catch (e) {
+      print('Verification failed: ${e.toString()}');
     }
+    return false;
   }
-  
+
+  // User logout
   Future<void> logout() async {
     try {
       await FirebaseAuth.instance.signOut();

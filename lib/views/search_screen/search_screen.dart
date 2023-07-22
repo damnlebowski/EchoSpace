@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echospace/controllers/search_controller.dart';
 import 'package:echospace/utils/constants/colors.dart';
-import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:echospace/views/user_profile_screen/user_profile_screen.dart';
 import 'package:echospace/views/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ import 'package:get/get.dart';
 class SearchScreen extends StatelessWidget {
   SearchScreen({super.key});
 
-  SearchController searchObj = SearchController();
+  SearchPageController searchObj = SearchPageController();
 
   final TextEditingController searchController = TextEditingController();
 

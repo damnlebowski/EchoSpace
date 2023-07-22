@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PrivacyPolicyPage extends StatelessWidget {
+  const PrivacyPolicyPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,12 +21,12 @@ class PrivacyPolicyPage extends StatelessWidget {
         backgroundColor: kBgBlack,
         title: const Text('Privacy Policy', style: TextStyle(color: kWhite)),
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
                 'Privacy Policy - EchoSpace',
                 style: TextStyle(

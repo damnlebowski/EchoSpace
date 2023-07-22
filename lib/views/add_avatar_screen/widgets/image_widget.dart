@@ -2,7 +2,7 @@ import 'package:echospace/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class InAppImage extends StatelessWidget {
-  InAppImage({
+  const InAppImage({
     super.key,
     required this.img,
   });

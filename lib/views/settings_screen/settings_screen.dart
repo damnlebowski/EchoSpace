@@ -44,7 +44,7 @@ class SettingsPage extends StatelessWidget {
               fontSize: 16,
             ),
             onTap: () {
-              Get.to(() => UserAgreementPage());
+              Get.to(() => const UserAgreementPage());
             },
           ),
           ListTile(
@@ -57,7 +57,7 @@ class SettingsPage extends StatelessWidget {
               fontSize: 16,
             ),
             onTap: () {
-              Get.to(() => PrivacyPolicyPage());
+              Get.to(() => const PrivacyPolicyPage());
             },
           ),
           ListTile(
@@ -97,8 +97,8 @@ class SettingsPage extends StatelessWidget {
               fontSize: 16,
             ),
             onTap: () {
-              OtpAuth().logout();
-              Get.offAll(Splash());
+              Auth().logout();
+              Get.offAll(const Splash());
             },
           ),
           const Expanded(

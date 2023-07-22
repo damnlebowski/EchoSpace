@@ -8,13 +8,13 @@ class UserNameList {
       QuerySnapshot snapshot =
           await FirebaseFirestore.instance.collection('user_details').get();
 
-      snapshot.docs.forEach((doc) {
+      for (var doc in snapshot.docs) {
         Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
         if (data.keys.contains('userName')) {
           String value = data['userName']!;
           userNameList.add(value);
         }
-      });
+      }
 
       print('Field values retrieved successfully');
     } catch (e) {

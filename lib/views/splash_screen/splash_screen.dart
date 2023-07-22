@@ -12,7 +12,7 @@ import 'package:echospace/utils/functions/get_user.dart';
 import 'package:get/get.dart';
 
 class Splash extends StatelessWidget {
-  Splash({super.key});
+  const Splash({super.key});
 
   gotoNextPage() async {
     User? userLogin = getUser();

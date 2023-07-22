@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echospace/services/user_post.dart';
 import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/utils/functions/date_time.dart';
-import 'package:echospace/views/main_screen/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:echospace/utils/functions/get_user.dart';
 import 'package:get/get.dart';
