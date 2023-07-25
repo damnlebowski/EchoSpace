@@ -15,9 +15,9 @@ import 'package:get/get.dart';
 import 'package:echospace/utils/functions/get_user.dart';
 import 'package:image_picker/image_picker.dart';
 
-XFile? imgFile;
-
 class AddAvatarPage extends StatelessWidget {
+  XFile? imgFile;
+
   final avatarObj = AvatarController();
   AddAvatarPage({
     super.key,

@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:echospace/controllers/internet_connectivity_controller.dart';
 import 'package:echospace/controllers/main_page_controller.dart';
 import 'package:echospace/utils/constants/colors.dart';
@@ -21,10 +19,10 @@ class MainScreen extends StatelessWidget {
   MainPageController obj = MainPageController();
 
   final List<Widget> screens = [
-    HomeScreen(),
+    const HomeScreen(),
     CreatePostScreen(),
-    ChatScreen(),
-    ProfilePage(),
+    const ChatScreen(),
+    const ProfilePage(),
   ];
 
   final ConnectivityService connectivityService = Get.find();
@@ -66,7 +64,7 @@ class MainScreen extends StatelessWidget {
                   icon: const Icon(Icons.search))
             ],
           ),
-          drawer: DrawerWidget(),
+          drawer: const DrawerWidget(),
           body: Obx(() => screens[obj.selectedIndex.value]),
           bottomNavigationBar: BottomNavigationWidget(
               selectedIndex: obj.selectedIndex, widgetTitle: obj.widgetTitle),
@@ -75,4 +73,3 @@ class MainScreen extends StatelessWidget {
     );
   }
 }
-
