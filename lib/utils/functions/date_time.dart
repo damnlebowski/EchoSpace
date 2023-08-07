@@ -17,6 +17,6 @@ String formatDateTime(DateTime dateTime) {
   } else if (difference.inSeconds < 5 && difference.inSeconds >= 0) {
     return 'just now';
   } else {
-    return 'Post from future';
+    return 'From the future';
   }
 }

@@ -93,7 +93,7 @@ class CheckLoginOtp extends StatelessWidget {
     if (verified) {
       bool isExisist = await UserDetails().isUserIdExists(mobile);
       if (isExisist) {
-        Get.offAll(() => MainScreen());
+        Get.offAll(() => const MainScreen());
       } else {
         Get.offAll(() => RegisterPage());
       }

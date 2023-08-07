@@ -42,7 +42,8 @@ class ViewPostPage extends StatelessWidget {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return alert(context, 'Do you want to delete?', () async {
+                      return CoustumDialog().alert(context, 'Do you want to delete?',
+                          () async {
                         await UserPost().deletePost(postId: postId);
 
                         PostFirebaseStorage().deletePostFromFirebaseStorage(

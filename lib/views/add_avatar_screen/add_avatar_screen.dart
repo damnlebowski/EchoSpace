@@ -1,4 +1,6 @@
+import 'dart:developer';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echospace/controllers/avatar_controller.dart';
 import 'package:echospace/controllers/internet_connectivity_controller.dart';
 import 'package:echospace/utils/constants/colors.dart';
@@ -174,20 +176,21 @@ class AddAvatarPage extends StatelessWidget {
           .imageToUrlProfilePic(user!.phoneNumber!, imgFile!);
     }
 
-    //user model
-
     UserModel model = UserModel(
-        mobile: user!.phoneNumber!,
-        name: (profileDetails['name']!).toLowerCase(),
-        userName: (profileDetails['userName']!).toLowerCase(),
-        profilePhoto:
-            avatarObj.appImg.value == null ? imgUrl! : avatarObj.appImg.value!,
-        bio: 'I am using EchoSpace',
-        posts: 0,
-        connections: []);
-
+      fcmToken: 'token',
+      mobile: user!.phoneNumber!,
+      name: (profileDetails['name']!).toLowerCase(),
+      userName: (profileDetails['userName']!).toLowerCase(),
+      profilePhoto:
+          avatarObj.appImg.value == null ? imgUrl! : avatarObj.appImg.value!,
+      bio: 'I am using EchoSpace',
+      posts: 0,
+      connections: [],
+      lastSeen: Timestamp.now(),
+      isOnline: false,
+    );
     //save user details to firebase
     UserDetails().addDetailsOfUser(model);
-    Get.offAll(MainScreen());
+    Get.offAll(() => const MainScreen());
   }
 }

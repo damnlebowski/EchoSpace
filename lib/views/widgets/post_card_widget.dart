@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echospace/controllers/post_card_controller.dart';
 import 'package:echospace/utils/constants/colors.dart';
@@ -42,13 +43,13 @@ class PostCardWidget extends StatelessWidget {
                 (documentSnapshot.data()['time'] as Timestamp).toDate()),
             style: const TextStyle(color: Colors.grey, fontSize: 13),
           ),
-          kHeight1,
+          // kHeight1,
           Text(
             documentSnapshot.data()['userName'],
             style: const TextStyle(
                 color: kWhite, fontSize: 18, fontWeight: FontWeight.w400),
           ),
-          kHeight1,
+          // kHeight1,
           Text(
             documentSnapshot.data()['title'],
             overflow: TextOverflow.ellipsis,
@@ -68,7 +69,18 @@ class PostCardWidget extends StatelessWidget {
                       image: documentSnapshot.data()['imageUrl'])),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
-                    child: Image.network(documentSnapshot.data()['imageUrl']),
+                    // child: Image.network(documentSnapshot.data()['imageUrl']),
+                    child: CachedNetworkImage(
+                      imageUrl: documentSnapshot.data()['imageUrl'],
+                      placeholder: (context, url) => const SizedBox(
+                          height: 100,
+                          width: 100,
+                          child: Center(child: CircularProgressIndicator())),
+                      errorWidget: (context, url, error) => const Icon(
+                        Icons.error,
+                        color: kRed,
+                      ),
+                    ),
                   ),
                 ),
                 Row(

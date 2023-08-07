@@ -28,7 +28,7 @@ class Splash extends StatelessWidget {
       if (userLogin != null && !isExisist) {
         Get.off(() => RegisterPage());
       } else if (userLogin != null && isExisist) {
-        Get.off(() => MainScreen());
+        Get.off(() => const MainScreen());
       }
     });
   }

@@ -6,7 +6,10 @@ import 'package:image_picker/image_picker.dart';
 
 class PostFirebaseStorage {
   Future<String> imageToUrlPost(
-      String userId, XFile image, String docId) async {
+    String userId,
+    XFile image,
+    String docId,
+  ) async {
     try {
       final storageRef = FirebaseStorage.instance
           .ref()
@@ -25,10 +28,14 @@ class PostFirebaseStorage {
     }
   }
 
-  deletePostFromFirebaseStorage({required String docId,required String mobile}) async {
+  deletePostFromFirebaseStorage(
+      {required String docId, required String mobile}) async {
     try {
-      Reference file =
-          FirebaseStorage.instance.ref().child('user_posts').child(mobile).child(docId);
+      Reference file = FirebaseStorage.instance
+          .ref()
+          .child('user_posts')
+          .child(mobile)
+          .child(docId);
       await file.delete();
     } catch (e) {
       print(e);

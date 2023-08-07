@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echospace/views/post_view_screen/post_view_screen.dart';
 import 'package:echospace/views/widgets/button_widget.dart';
@@ -52,7 +53,8 @@ class _ProfileGridWidgetState extends State<ProfileGridWidget> {
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           fit: BoxFit.fill,
-                          image: NetworkImage(
+                          // image: NetworkImage(snapshot.data?.docs[index].get('imageUrl')),
+                          image: CachedNetworkImageProvider(
                               snapshot.data?.docs[index].get('imageUrl'))))),
             ),
           );

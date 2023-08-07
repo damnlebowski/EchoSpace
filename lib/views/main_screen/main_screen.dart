@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:echospace/controllers/internet_connectivity_controller.dart';
 import 'package:echospace/controllers/main_page_controller.dart';
+import 'package:echospace/services/user_status.dart';
 import 'package:echospace/utils/constants/colors.dart';
+import 'package:echospace/utils/functions/get_user.dart';
 import 'package:echospace/views/chat_screen/chat_sccreen.dart';
 import 'package:echospace/views/create_post_screen/create_post_screen.dart';
 import 'package:echospace/views/home_screen/home_screen.dart';
@@ -9,13 +13,19 @@ import 'package:echospace/views/main_screen/widgets/drawer_widget.dart';
 import 'package:echospace/views/profile_screen/profile_screen.dart';
 import 'package:echospace/views/search_screen/search_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class MainScreen extends StatelessWidget {
-  MainScreen({
+class MainScreen extends StatefulWidget {
+  const MainScreen({
     super.key,
   });
 
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
   MainPageController obj = MainPageController();
 
   final List<Widget> screens = [
@@ -26,6 +36,24 @@ class MainScreen extends StatelessWidget {
   ];
 
   final ConnectivityService connectivityService = Get.find();
+
+  @override
+  void initState() {
+    super.initState();
+    UserStatus.updateActiveStatus(true);
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      if (getUser() != null) {
+        if (message.toString().contains('resume')) {
+          UserStatus.updateActiveStatus(true);
+        }
+        if (message.toString().contains('pause')) {
+          UserStatus.updateActiveStatus(false);
+        }
+      }
+
+      return Future.value(message);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

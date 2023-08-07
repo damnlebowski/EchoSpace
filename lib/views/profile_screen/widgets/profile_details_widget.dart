@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echospace/models/user_model.dart';
 import 'package:echospace/services/user_connections.dart';
@@ -61,8 +62,8 @@ class ProfileDetailsWidget extends StatelessWidget {
                 children: [
                   kWidth10,
                   CircleAvatar(
-                    backgroundImage:
-                        NetworkImage(snapshot.data?.get('profilePhoto')),
+                    backgroundImage: CachedNetworkImageProvider(
+                        snapshot.data?.get('profilePhoto')),
                     radius: 50,
                   ),
                   const Spacer(),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-const kHeight1 = SizedBox(
-  height: 1,
+const kHeight3 = SizedBox(
+  height: 3,
 );
 
 const kHeight10 = SizedBox(

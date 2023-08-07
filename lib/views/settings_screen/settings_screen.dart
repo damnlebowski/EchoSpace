@@ -1,6 +1,8 @@
 import 'package:echospace/services/otp_auth_services.dart';
+import 'package:echospace/services/push_notification.dart';
 import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/utils/constants/widgets.dart';
+import 'package:echospace/utils/functions/alert.dart';
 import 'package:echospace/views/privacy_polaciy_screen/privacy_policy_screen.dart';
 import 'package:echospace/views/splash_screen/splash_screen.dart';
 import 'package:echospace/views/user_agreement_screen/user_agreement_screen.dart';
@@ -96,9 +98,13 @@ class SettingsPage extends StatelessWidget {
               label: "Log out",
               fontSize: 16,
             ),
-            onTap: () {
+            onTap: () async {
+              FCM().clearToken();
               Auth().logout();
-              Get.offAll(const Splash());
+              CoustumDialog().showProgress();
+              await Future.delayed(const Duration(seconds: 2));
+              Get.back();
+              Get.offAll(() => const Splash());
             },
           ),
           const Expanded(

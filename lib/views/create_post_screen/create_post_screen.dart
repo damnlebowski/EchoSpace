@@ -2,6 +2,7 @@ import 'package:echospace/controllers/create_post_controller.dart';
 import 'package:echospace/utils/constants/colors.dart';
 import 'package:echospace/utils/constants/widgets.dart';
 import 'package:echospace/services/user_post.dart';
+import 'package:echospace/utils/functions/alert.dart';
 import 'package:echospace/utils/functions/pick_and_crop_image.dart';
 import 'package:echospace/views/user_register_screen/user_register_screen.dart';
 import 'package:echospace/views/widgets/button_widget.dart';
@@ -76,6 +77,7 @@ class CreatePostScreen extends StatelessWidget {
                           titleController.text.trim().isEmpty) {
                         return;
                       }
+                      CoustumDialog().showProgress();
                       onPostClick();
                     },
                     buttonColor: kRed)
@@ -88,10 +90,14 @@ class CreatePostScreen extends StatelessWidget {
   }
 
   onPostClick() async {
-    await UserPost().createPost(obj.image.value!, titleController.text.trim());
-    obj.image.value = null;
-    titleController.text = '';
-    snack('Successful', 'Post Created');
+    await UserPost()
+        .createPost(obj.image.value!, titleController.text.trim())
+        .then((value) {
+      obj.image.value = null;
+      titleController.clear();
+      Get.back();
+      snack('Successful', 'Post Created');
+    });
   }
 
   onImageSelect() async {

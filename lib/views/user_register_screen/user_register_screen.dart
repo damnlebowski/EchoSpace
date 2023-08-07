@@ -119,6 +119,9 @@ class RegisterPage extends StatelessWidget {
         .checkForUsernameAvailablity(usernameController.text.trim());
     if (!_formKey.currentState!.validate()) return;
 
+    if (usernameController.text.trim().isEmpty ||
+        nameController.text.trim().isEmpty) return;
+
     if (!userNameAvailable) {
       snack('Error', 'Username already taken.');
       return;

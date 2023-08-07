@@ -31,7 +31,7 @@ class UserPost {
           mobile: '${user.phoneNumber}',
           imageUrl: imgUrl,
           title: title,
-          time: Timestamp.fromDate(DateTime.now()),
+          time: Timestamp.now(),
           likes: [],
           saved: [],
           comments: []);
@@ -64,12 +64,13 @@ class UserPost {
           'comment_id': commentText,
           'comment_text': commentText,
           'user_name': userDoc.get('userName'),
-          'time': DateTime.now(),
+          'time': Timestamp.now(),
         }
       ])
     });
   }
 
+//remove comment
   removeComment(String postId, String commentText, String user) async {
     CollectionReference userPostsCollection =
         FirebaseFirestore.instance.collection('user_posts');
@@ -78,7 +79,7 @@ class UserPost {
         {
           'comment_text': commentText,
           'user_name': user,
-          'time': DateTime.now(),
+          'time': Timestamp.now(),
         }
       ])
     });
@@ -96,38 +97,4 @@ class UserPost {
     }
   }
 
-  // Future<List<Post>> getUserPosts() async {
-  //   List<Post> userPosts = [];
-
-  //   try {
-  //     CollectionReference userPostsCollection =
-  //         FirebaseFirestore.instance.collection('user_posts');
-
-  //     QuerySnapshot postSnapshot = await userPostsCollection.get();
-
-  //     for (QueryDocumentSnapshot postDoc in postSnapshot.docs) {
-  //       List<String> comments = [];
-
-  //       // Retrieve comments for each post
-  //       CollectionReference commentsCollection =
-  //           postDoc.reference.collection('comments');
-  //       QuerySnapshot commentsSnapshot = await commentsCollection.get();
-
-  //       for (QueryDocumentSnapshot commentDoc in commentsSnapshot.docs) {
-  //         comments.add(
-  //           commentDoc.get('commentText'),
-  //         );
-  //       }
-
-  //       Post post = Post.fromJson(postDoc.data() as Map<String, dynamic>);
-
-  //       userPosts.add(post);
-  //     }
-
-  //     print('User posts retrieved successfully');
-  //   } catch (e) {
-  //     print('Error retrieving user posts: $e');
-  //   }
-  //   return userPosts;
-  // }
 }
